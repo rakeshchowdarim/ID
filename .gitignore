@@ -1,0 +1,9 @@
+*.obj
+*.mtl
+*.jpg
+/data
+/img
+favicon.ico
+Three/
+Test/
+*.pdf
