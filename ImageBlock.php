@@ -4,6 +4,10 @@ session_start();
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="cache-control" content="max-age=0">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="-1">
+<meta http-equiv="pragma" content="no-cache">
 <link rel="stylesheet" href="style/grid.css">
 <style>
 body{
@@ -17,6 +21,9 @@ body{
 	display: grid;
 		grid-template-columns: repeat(auto-fill, minmax(300px,1fr));
 	grid-gap: 5px;
+
+	/*display: flex;*/
+align-items: center;
 	/*width: 95vw;*/
 }
 .img3 {
@@ -38,12 +45,18 @@ body{
 <script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
 <script src='js/jquery-1.8.3.min.js'></script>
 <script src='js/jquery.elevatezoom.js'></script>
+<script src="js/veiwer.js"></script>
 <script src='js/awsGetS3Data.js'></script>
 <script src="js/genFilters.js"></script>
 
 
 <script>
-window.onload = generateGallery('<?php echo $_SESSION["dataPrefix"].$_GET["structure"]."/".$_GET["name"]."images/" ;?>');
+window.onload = function(){
+	// backButtonDisplay();
+	generateGallery('<?php echo $_SESSION["dataPrefix"].$_GET["structure"]."/".$_GET["name"]."images/" ;?>');
+
+	
+}
 //window.onload=test();
 </script>
 

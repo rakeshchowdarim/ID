@@ -7,11 +7,15 @@ function generateFilters(filterId) {
 		var newImgSrc = imgSrc[0]+"."+imgSrc[1]+"."+imgSrc[2]+"."+filterId+"."+imgSrc[4];
 		$(this).attr("src", newImgSrc);
 		$(this).attr("data-zoom-image", newImgSrc);
-		$(".zoomMouse").elevateZoom({scrollZoom : true, zoomType	: "lens",
-					constrainType:"height", constrainSize:274, containLensZoom: true, cursor: 'pointer'});
-	});
+		$(".zoomMouse").elevateZoom({scrollZoom : true, zoomType	: "lens",constrainType:"width", constrainSize:1000,easing:true,easingType:"zoomdefault", containLensZoom: true, cursor: 'pointer'
+		});
+		$(".zoomMouse").animate({ top: '-=100px' }, 600, 'easeOutCubic');
+					
+					//easingDuration:100,lensFadeIn:1000,lensFadeOut:1000, zoomWindowFadeIn:1000,zoomWindowFadeOut:1000,zoomTintFadeIn:1000,zoomTintFadeOut:1000, 
+					
 	// body...
 
+})
 }
 
 function hideShowFilteredImages(filterType){
@@ -19,6 +23,8 @@ function hideShowFilteredImages(filterType){
 //	var filterClick = document.getElementById(filterType);
 	$(".fi").hide();
 	$("."+filterType).show();
+
+
 
 	// if ($(filterClick).is('hsv')){
 	
@@ -37,5 +43,5 @@ function hideShowFilteredImages(filterType){
  //    document.getElementById("hsv").style.visibility = "visible";
  //    document.getElementById('frame').contentWindow.generateFilters("hsv");
 	// }
-
 }
+

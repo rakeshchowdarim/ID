@@ -15,9 +15,10 @@ body {
 	/*text-align: justify;*/
 }
 .footer-margin{
-	margin-top: 12px;
+	/*margin-top: 12px;*/
 	margin-left: 5%;
 	margin-right: 5%;
+	display: block;
 }
 
 .wrapper {
@@ -34,7 +35,7 @@ body {
 	"hM hM hM"
 	"hS hS hS"
 	"sidebarL content sidebarR"
-	"footer footer footer";
+	"footerL footer footerR";
 }
 
 .spanText{
@@ -107,8 +108,17 @@ body {
 	width:100%;
 	overflow: hidden;
 }
+
+.backButton{
+	grid-area: footerL;
+	background-color: #32CCBD;
+
+
+}
 .footer {
-	grid-area: footer;
+	/*grid-area: footer;*/
+	grid-column: footer-start/footerR-end ;
+	grid-row:footer-start/footer-end;
 	text-align: center;
 	 display: inline-block;	
 }
@@ -155,7 +165,9 @@ text-align:justified;
 	overflow: hidden;
 }
 .f {
-	align: center;
+	/*align: center;*/
+	/*align-self: stretch;*/
+	align-items: center;
 
 }
 

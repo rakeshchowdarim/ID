@@ -1,3 +1,5 @@
+var bucketLoc = "https://s3.amazonaws.com/visualizationsoftware/";
+
 function sidebarLeft(id) {
 	console.log(id);
 	console.log($('#canvas').attr('id'));
@@ -12,6 +14,7 @@ function sidebarLeft(id) {
 		$('.iFrame').attr("scrolling", "no");
 		$('.r').show();
 		$('.f').show();
+		$('#dem').hide();
 		//var objLoc = $("#canvas").attr('name')+$("#footer").attr("name")+"/"+$("#rhs").attr("name")+"obj/";
 		//var objLoc1=fetchObj(objLoc);
 		//$("#footer").attr("name",objLoc1.path);
@@ -26,10 +29,19 @@ function sidebarLeft(id) {
 		$('.iFrame').attr("scrolling", "yes");
 		$('.r').show();
 		$('#li').hide();
+		$('#dem').hide();
 		$('.f').show();
+	}else if(id == $('#ortho').attr('id')){
+		$('.iFrame').attr("scrolling", "yes");
+		$('.f').hide();
+		$('.r').show();
+		// $('#back').show();
+		$('#thermal').hide();
+		$('#li').hide();
 	}
 	
 }
+
 function frameFocus(frame) {
 	var structure = $("#footer").attr("name");
 	var rhs = $("#rhs").attr("name");
@@ -38,11 +50,18 @@ function frameFocus(frame) {
 	var header = document.getElementById("pageName");
 	iFrame.src = frame + ".php?structure="+ structure + "&name=" + rhs;
 	
-	//pageName.innerHTML = frame;
-
-	
-	
+	//pageName.innerHTML = frame;	
 }
+
+
+// function frameOrtho(frame){
+
+// 	var or = $("#rhs").attr("name");
+
+// 	var iFrame = document.getElementById("frame");
+// 	var header = document.getElementById("pageName");
+// 	iFrame.src = frame + ".php?name=" + rhs;
+// }
 
 function makeFocus(id, to) {
 	var me = document.getElementById(id);
@@ -58,7 +77,7 @@ function makeFocus(id, to) {
 		$('.r').removeClass('focused');
 		// me.parent.name=me.id;
 		$("#rhs").attr("name",$(me).attr("id"));
-		frameFocus($('#frame').attr("src").split(".",1));
+			frameFocus($('#frame').attr("src").split(".",1));
 	} else if ($(me).hasClass('f')) {
 		$('.f').removeClass('focused');
 		$("#footer").attr("name",$(me).attr("id"));
@@ -84,6 +103,32 @@ function radioFilter(idFilter){
 		document.getElementById('frame').contentWindow.hideShowFilteredImages(idFilter);
 		
 	}
+}
+
+function backButtonDisplay(){
+
+
+document.getElementById("back").style.visibility = "hidden";
+console.log("Entering backButtonDisplay()");
+
+var frameId=document.getElementById("frame");
+console.log(frameId.contentWindow.location.href);
+if(frameId.contentWindow.location.href.includes("fullScreenImg.php")){
+	console.log("fullScreenImg.php Part");
+	document.getElementById("back").style.visibility = "visible";
+}else if(frameId.contentWindow.location.href.includes("ImageBlock.php")){
+	console.log("ImageBlock.php Part");
+	
+document.getElementById("back").style.visibility = "hidden";
+}else if(frameId.contentWindow.location.href.includes("ortho.php")){
+	console.log("ortho.php Part");
+	
+document.getElementById("back").style.visibility = "hidden";
+}else{
+	console.log("Else Part");
+	document.getElementById("back").style.visibility = "hidden";
+}
+
 }
 
 

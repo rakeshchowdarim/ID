@@ -1,0 +1,77 @@
+<html>
+    <head>
+        <link href="https://developer.cdn.mozilla.net/static/build/styles/samples.37902ba3b7fe.css" rel="stylesheet" type="text/css" />
+        
+    </head>
+    <script src="jquery-csv.js"></script>
+    <body>
+        
+            <canvas id="canvas" width="675" height="675" style="float:left"></canvas>
+<span id="color" style="width:200px;height:50px;float:left"></span>
+        
+        
+            <script type="text/javascript">
+                var img = new Image();
+img.crossOrigin="anonymous";
+img.src = 'img/11-35-08-576_radiometric.jpg';
+
+// var reader = new FileReader();
+
+
+// reader.onload = function(e) {
+//   var text = e.target.result;
+//   var data = $.csv.toArrays(text);
+//   document.write(data[1][1]);
+
+// }
+
+// reader.readAsText('data.csv');
+
+
+
+$.csv.toArrays(csv);
+
+
+var canvas = document.getElementById('canvas');
+var ctx = canvas.getContext('2d');
+img.onload = function() {
+  ctx.drawImage(img, 0, 0);
+  img.style.display = 'none';
+};
+var color = document.getElementById('color');
+function pick(event) {
+  var x = event.layerX;
+  var y = event.layerY;
+  var pixel = ctx.getImageData(x, y, 1, 1);
+  var data = pixel.data;
+  var rgba = 'rgba(' + data[0] + ', ' + data[1] +
+             ', ' + data[2] + ', ' + (data[3] / 255) + ')';
+  color.style.background =  rgba;
+  color.textContent = rgba;
+  console.log(color.textContent);
+}
+
+
+function readTextFile(file)
+{
+    var rawFile = new XMLHttpRequest();
+    rawFile.open("GET", file, true);
+    rawFile.onreadystatechange = function ()
+    {
+        if(rawFile.readyState === 4)
+        {
+            if(rawFile.status === 200 || rawFile.status == 0)
+            {
+                var allText = rawFile.responseText;
+                alert(allText);
+            }
+        }
+    }
+    rawFile.send(null);
+}
+
+canvas.addEventListener('mousemove', pick);
+            </script>
+        
+    </body>
+</html>

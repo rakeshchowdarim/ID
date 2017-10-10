@@ -1,0 +1,126 @@
+  /* Below line is used for online Google font */
+@import url(http://fonts.googleapis.com/css?family=Raleway);
+h2{
+background-color: #FFFFFF;
+padding: 30px 35px;
+margin: -10px -50px;
+text-align:center;
+border-radius: 10px 10px 0 0;
+}
+hr{
+margin: 10px -50px;
+border: 0;
+border-top: 1px solid #ccc;
+margin-bottom: 40px;
+}
+div.container{
+width: 100%;
+height: 100%;
+margin:35px auto;
+font-family: 'Raleway', sans-serif;
+}
+div.main{
+width: 100%;
+padding: 10px 50px 25px;
+border: 2px solid #32CCBD;
+border-radius: 10px;
+font-family: raleway;
+float:left;
+margin-top:50px;
+}
+input[type=text],input[type=password]{
+width: 70%;
+height: 40px;
+padding: 5px;
+margin-bottom: 25px;
+margin-top: 5px;
+border: 2px solid #32CCBD;
+color: #4f4f4f;
+font-size: 16px;
+border-radius: 5px;
+}
+label{
+color: #464646;
+text-shadow: 0 1px 0 #fff;
+font-size: 14px;
+font-weight: bold;
+}
+center{
+font-size:32px;
+}
+.button {
+  padding: 15px 25px;
+  font-size: 16px;
+  text-align: center;
+  cursor: pointer;
+  outline: none;
+  background-color: #32CCBD;
+  border: #32CCBD;
+  border-radius: 3px;
+  /*box-shadow: 0 9px #999; */
+  
+  
+}
+
+.backbutton {
+  padding: 7px 10px;
+  font-size: 16px;
+  text-align: center;
+  cursor: pointer;
+  outline: none;
+  background-color: #32CCBD;
+  border: #32CCBD;
+  border-radius: 3px;
+  /*box-shadow: 0 9px #999; */
+}
+
+.backbutton:hover {background-color: #FDC300}
+
+.selectedbackbutton {
+  padding: 7px 10px;
+  font-size: 16px;
+  text-align: center;
+  cursor: pointer;
+  outline: none;
+  background-color: #FDC300;
+  border: #32CCBD;
+  border-radius: 3px;
+  /*box-shadow: 0 9px #999; */
+}
+
+.button:hover {background-color: #FDC300}
+
+.button:active {
+  background-color: #3e8e41;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+.note{
+color:red;
+}
+.valid{
+color:green;
+}
+.back{
+text-decoration: none;
+border: 1px solid rgb(0, 143, 255);
+background-color: #32CCBD;
+padding: 3px 20px;
+border-radius: 2px;
+color:  #32CCBD;
+}
+input[type=button]{
+font-size: 16px;
+background: linear-gradient(#ffbc00 5%, #ffdd7f 100%);
+border: 0px solid #32CCBD;
+color: #32CCBD;
+font-weight: bold;
+cursor: pointer;
+width: 100%;
+border-radius: 5px;
+padding: 10px 0;
+outline:none;
+}
+input[type=button]:hover{
+background: linear-gradient(#ffdd7f 5%, #ffbc00 100%);
+}
+

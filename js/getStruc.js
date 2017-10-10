@@ -6,14 +6,20 @@ function generateStructures(to){
 		if(data.Prefix.charAt(data.Prefix.length - 1) == '/'){
 			var locFolder = data.Prefix.substr(to.length,data.Prefix.length);
 
-			if (locFolder.includes('extras')) {}else{
+			if (locFolder.includes('extras')||locFolder.includes('ortho')) {}else{
 
 				//var div = document.createElement("div");
-				var span = document.createElement("a");
+				 var span = document.createElement("a");
+				//var span = document.createElement("div");
 				foot.appendChild(span);
 				
 				var strucName = locFolder.charAt(0).toUpperCase() + locFolder.slice(1).replace("/","");
 				var strucBase = locFolder.charAt(0)+locFolder.slice(1).replace("/","");
+				//span.style.display="inline-block";
+				span.style.display="table-row";
+
+				//span.style.height="6%";
+				span.style.padding="0.63%";
 				span.onclick=function(){
 					console.log(strucName);
 					// makeFocus(this.id, strucName);

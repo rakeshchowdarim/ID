@@ -6,8 +6,8 @@ var imgs;
   Prefix: ""
  };
  var conf ={
-  accessKeyId:'AKIAIQXSVYR4JGVXH3XQ',
-  secretAccessKey:'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',
+  accessKeyId:'AKIAI4PD23SRALTHRDJQ',
+  secretAccessKey:'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',
   region: 'us-east-1'
   };
  
@@ -36,8 +36,9 @@ var imgs;
 		var bod = document.getElementById('body');
 		console.log(data.Key);
 		if(data.Key.charAt(data.Key.length - 1) !== '/'){
+			
 
-			if ((data.Key.includes(".hsv."))||(data.Key.includes(".sobel."))) {
+			if ((data.Key.includes(".hsv."))||(data.Key.includes(".sobel.")) ||data.Key.includes('.nonradiometric.') || data.Key.includes('.digital.') ) {
 
 
 
@@ -51,18 +52,30 @@ var imgs;
 
 				var thumb = imgSplit[0] + "/" + imgSplit[1] + "/" + imgSplit[2] + "/" + imgSplit[3] + 
 					"/thumb/" + sp2[0] + ".thumb.jpg";
+
+				var thumb1 = imgSplit[0] + "/" + imgSplit[1] + "/" + imgSplit[2] + "/" + imgSplit[3] + 
+					"/thumb/" + sp2[0] + ".hd.thumb.jpg";
+
+				var thumb2 = imgSplit[0] + "/" + imgSplit[1] + "/" + imgSplit[2] + "/" + imgSplit[3] + 
+					"/thumb/" + sp2[0] + ".radiometric.thumb.jpg";
+
+
 				
 				var domImg = document.createElement("img");
 				var div = document.createElement("div");
 				
-
+				console.log(data.Key.includes('.digital.') +" "+ data.Key.includes('.nonradiometric.') );
 				if (data.Key.includes(".hd.")) {
-
 
 					div.className = "imgWrap hd";
 					domImg.className = "img3 button";
-					domImg.src = bucketLoc + data.Key;
-					// domImg.style.verticalAlign= "middle";
+					//domImg.src = bucketLoc + data.Key;
+					domImg.src = bucketLoc + thumb1;
+
+					div.style.alignContent="center";
+					console.log(div.style.alignContent);
+					// div.style.textAlign="center";
+					// div.style.verticalAlign= "middle";
 					div.onclick = function(){
 						window.location.href="fullScreenImg.php?path="+ bucketLoc + data.Key + "&type=filter";
 					} 
@@ -71,26 +84,48 @@ var imgs;
 					
 				} else{
 
+
 					div.className = "imgWrap";
-					domImg.className = "img3 zoomMouse";
+					domImg.className = "img3 zoomMouse button";
+					div.style.alignContent="center";
+					//console.log(div.style.alignContent);
+					// div.style.textAlign="center";
+					// div.style.verticalAlign= "middle";
+					// domImg.style.display="table-cell";
+					// console.log(domImg.style.display);
+					// domImg.style.textAlign="center";
+					// domImg.style.verticalAlign= "middle";
 					
 					// $(domImg).attr("data-zoom-image",bucketLoc + data.Key);
 					// $(domImg).elevateZoom({scrollZoom : true, zoomType	: "lens",
 					// constrainType:"height", constrainSize:274, containLensZoom: true, cursor: 'pointer'});
 
-					
-					if(data.Key.includes('radiometric') || data.Key.includes('nonradiometric') ||data.Key.includes('digital')){
-						domImg.src = bucketLoc + data.Key;
+					//console.log(data.Key.includes('digital') +" "+ data.Key.includes('nonradiometric') );
+
+					if(data.Key.includes('.radiometric.')){
+						console.log(data.Key+".radiometric.");
+						// domImg.src = bucketLoc + data.Key;
+						domImg.src = bucketLoc + thumb2;
+
+						div.style.alignContent="center";
+						console.log(div.style.alignContent);
+						// div.style.textAlign="center";
+						// div.style.verticalAlign= "middle";
 						// domImg.style.verticalAlign= "middle";
 						div.onclick = function(){
 						window.location.href="fullScreenImg.php?path="+ bucketLoc + data.Key + "&type=thermal";
 					} 
+
 					}else{
 						domImg.src = bucketLoc + thumb;
+						div.style.alignContent="center";
+						console.log(div.style.alignContent);
+						// div.style.textAlign="center";
+						// div.style.verticalAlign= "middle";
 						// domImg.style.verticalAlign= "middle";
 						div.onclick = function(){
 						window.location.href="fullScreenImg.php?path="+ bucketLoc + data.Key + "&type=hd";
-					} 
+					}
 					}
 				}
 
@@ -156,16 +191,33 @@ console.log(to);
 				//div.innerHTML=data.Prefix;
 				div.appendChild(span);
 				var locFolder = data.Prefix.substr(to.length,data.Prefix.length);
+				console.log(locFolder);
 				var lastChars = locFolder.substr(locFolder.length-5).replace("/","");
+				console.log(lastChars);
 				var checkLastChar = Number.isInteger(lastChars);
 				console.log(lastChars);
 				console.log(checkLastChar);
 				console.log(isNaN(lastChars));
-				
 
-				if(isNaN(lastChars)){
+				var folderSplit = data.Prefix.split("/");
+					console.log(folderSplit);
+					var dateVar = folderSplit[2].split("_");
+
+				console.log(dateVar);
+				
+				console.log(isNaN(dateVar[2]));
+				// if(isNaN(lastChars)){
+				if(isNaN(dateVar[2])){
+
+
 					var namDisp = locFolder.charAt(0).toUpperCase() + locFolder.slice(1).replace("/","");
-					if(namDisp.includes("_")){
+					// if(namDisp.includes("_")){
+						if(namDisp.includes("-")){
+						// namDisp=namDisp.replace("_"," ");
+						console.log(namDisp);
+						namDisp=namDisp.replace("-"," ");
+					}else if(namDisp.includes("_")){
+						console.log(namDisp);
 						namDisp=namDisp.replace("_"," ");
 					}
 					span.innerHTML=namDisp;
@@ -173,10 +225,41 @@ console.log(to);
 
 				}else{
 
-					var folderSplit = data.Prefix.split("/");
-					var nameDisplay =  folderSplit[2].charAt(0).toUpperCase()+ folderSplit[2].substr(1,folderSplit[2].length-7)
-							+	" " + folderSplit[2].substr(folderSplit[2].length-6, 2) + ", " 
-							+	 folderSplit[2].substr(folderSplit[2].length-4, 4);
+					
+					if(dateVar[1].includes("01")){
+						dateVar[1]="January";
+					}else if(dateVar[1].includes("02")){
+						dateVar[1]="February";
+					}else if(dateVar[1].includes("03")){
+						dateVar[1]="March";
+					}else if(dateVar[1].includes("04")){
+						dateVar[1]="April";
+					}else if(dateVar[1].includes("05")){
+						dateVar[1]="May";
+					}else if(dateVar[1].includes("06")){
+						dateVar[1]="June";
+					}else if(dateVar[1].includes("07")){
+						dateVar[1]="July";
+					}else if(dateVar[1].includes("08")){
+						dateVar[1]="August";
+					}else if(dateVar[1].includes("09")){
+						dateVar[1]="September";
+					}else if(dateVar[1].includes("10")){
+						dateVar[1]="October";
+					}else if(dateVar[1].includes("11")){
+						dateVar[1]="November";
+					}else if(dateVar[1].includes("12")){
+						dateVar[1]="December";
+					}
+
+					var nameDisplay = dateVar[1]+" "+dateVar[2]+ ", " + dateVar[0];
+					// var nameDisplay =  folderSplit[2].charAt(0).toUpperCase()+ folderSplit[2].substr(1,folderSplit[2].length-7)
+					// 		+	" " + folderSplit[2].substr(folderSplit[2].length-6, 2) + ", " 
+					// 		+	 folderSplit[2].substr(folderSplit[2].length-4, 4);
+					console.log(nameDisplay);
+					// if(nameDisplay.includes("_")){
+					// 	nameDisplay=nameDisplay.replace("_"," ");
+					// }
 					if(nameDisplay.includes("_")){
 						nameDisplay=nameDisplay.replace("_"," ");
 					}

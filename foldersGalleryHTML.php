@@ -1,6 +1,10 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="cache-control" content="max-age=0">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="-1">
+<meta http-equiv="pragma" content="no-cache">
  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
  
 <?php
@@ -15,8 +19,9 @@ session_start();
 	overflow-x: hidden;
 	/*width: 95vw;*/
 	display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(300px,1fr));
+	grid-template-columns: repeat(auto-fill, minmax(300px,1fr));
 	grid-gap: 5px;
+	align-items: center;
 }
 
 .img3 {
@@ -47,7 +52,7 @@ session_start();
 		// body...
 		generateFolders("<?php echo lcfirst($_SESSION['company'])?>/");
 
-		// formatName('<?php echo $_SESSION["dataPrefix"] ;?>');
+	
 	}
 	
 	//window.onload=test();

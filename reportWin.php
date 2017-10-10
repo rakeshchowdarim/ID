@@ -5,7 +5,10 @@
 <html style="width:100%; height: 100%">
 <head>
 <title>Report</title>
-
+<meta http-equiv="cache-control" content="max-age=0">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="-1">
+<meta http-equiv="pragma" content="no-cache">
 </head>
 <script src="https://sdk.amazonaws.com/js/aws-sdk-2.7.20.min.js"></script>
 <script src='js/awsGetS3Data.js'></script>

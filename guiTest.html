@@ -1,0 +1,375 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<title>Fast Image Filters with WebGL -  PhobosLab</title>
+	<link rel="stylesheet" type="text/css" href="/templates/phoboslab/screen.css" />
+	<link href="http://fonts.googleapis.com/css?family=Droid+Sans+Mono|Open+Sans:400,700,400italic" rel="stylesheet">
+	<link rel="Shortcut Icon" href="/templates/phoboslab/phoboslab.ico" />
+	<link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="/log/feed" />
+	<script type="text/javascript" src="/templates/phoboslab/whitebox.js"></script>
+	<meta name="viewport" content="width=device-width"/>
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-571256-18', 'auto');
+		ga('send', 'pageview');
+	</script>
+</head>
+<body>
+
+<div id="title">
+	<a href="/"><h1 id="phoboslab-logo">PHOBOSLAB</h1></a>
+</div>
+
+<div id="content">
+			<a id="blog-home" href="/log">Blog Home</a>
+		
+
+<div class="post">
+	<h1>Fast Image Filters with WebGL</h1>
+		<p>WebGLImageFilter is a small JavaScript library for applying a chain of filters to an image.</p>
+
+<div>
+	Filters: 
+	<div style="float: right">
+		<select id="webgl-filter-stage-1" style="width: 120px"></select>
+		<select id="webgl-filter-stage-2" style="width: 120px"></select>
+		<select id="webgl-filter-stage-3" style="width: 120px"></select>
+	</div>
+</div>
+<canvas id="image-filter-canvas" width="500" height="375" style="width:600px; height:450px;"></canvas>
+<div><em>Sergey Brin in his badass Tesla, sporting Chrome wheels</em></div>
+
+<script type="text/javascript" src="/files/webgl-image-filter/webgl-image-filter.js?v3"></script>
+<script type="text/javascript">
+(function(){
+
+var presets = [
+	{name: 'none'},
+	{name: 'negative'},
+	{name: 'brightness', args:[1.5]},
+	{name: 'saturation', args:[1.5]},
+	{name: 'contrast', args:[1.5]},
+	{name: 'hue', args:[180]},
+	{name: 'desaturate'},
+	{name: 'desaturateLuminance'},
+	{name: 'brownie'},
+	{name: 'sepia'},
+	{name: 'vintagePinhole'},
+	{name: 'kodachrome'},
+	{name: 'technicolor'},
+	{name: 'detectEdges'},
+	{name: 'sharpen'},
+	{name: 'emboss'},
+	{name: 'blur', args:[7]}
+];
+
+var fillSelectBox = function( id, onchange ) {
+	var select = document.getElementById(id);
+	select.onchange = onchange;
+
+	for( var i = 0; i < presets.length; i++ ) {
+		var name = presets[i].name;
+		var opt = document.createElement('option');
+		opt.value = i;
+		opt.innerHTML = name;
+		select.appendChild(opt);
+	}
+};
+
+var addFilterFromSelectBox = function( filter, id ) {
+	var index = parseInt(document.getElementById(id).value);
+	var preset = presets[index];
+	if( preset.name == 'none' ) { return; }
+
+	filter.addFilter( preset.name, preset.args );
+};
+
+// Get the 2d context from the canvas and load an image
+var canvas = document.getElementById('image-filter-canvas');
+var ctx = canvas.getContext('2d');
+ctx.textAlign = 'center';
+ctx.fillStyle = '#000';
+ctx.fillRect(0,0, canvas.width, canvas.height);
+ctx.fillStyle = '#fff';
+ctx.fillText("Loading...", canvas.width/2, canvas.height/2);
+
+// Create the filter
+try {
+	var filter = new WebGLImageFilter();
+}
+catch( err ) {
+	ctx.fillStyle = '#000';
+	ctx.fillRect(0,0, canvas.width, canvas.height);
+	ctx.fillStyle = '#fff';
+	ctx.fillText("This browser doesn't support WebGL", canvas.width/2, canvas.height/2);
+	return;
+}
+
+var img = new Image();
+img.src = '/files/webgl-image-filter/sergey-brin.jpg';
+img.onload = function() {
+	canvas.width = img.width;
+	canvas.height = img.height;
+
+	// When a select box changes its value, run the filter again
+	var onchange = function( ev ) {
+		filter.reset();
+		addFilterFromSelectBox(filter, 'webgl-filter-stage-1');
+		addFilterFromSelectBox(filter, 'webgl-filter-stage-2');
+		addFilterFromSelectBox(filter, 'webgl-filter-stage-3');
+
+		var filteredImage = filter.apply(img);
+
+		// Draw the filtered image into our 2D Canvas
+		ctx.drawImage(filteredImage,0,0);
+	};
+
+	// Fill the Select Box and attach the onchange listener
+	fillSelectBox('webgl-filter-stage-1', onchange);
+	fillSelectBox('webgl-filter-stage-2', onchange);
+	fillSelectBox('webgl-filter-stage-3', onchange);
+
+	document.getElementById('webgl-filter-stage-1').selectedIndex = 8;
+	document.getElementById('webgl-filter-stage-1').onchange();
+};
+
+})();
+</script>
+
+<p>But to quote myself from twitter:</p>
+<blockquote>
+<p>That awkward moment when you realize the lib you've been polishing for the past 6 hours already exists. With more features and a better API.</p>
+</blockquote>
+<p>~ <a href="https://twitter.com/phoboslab/status/397137160341426176">@phoboslab, Nov 3.</a></p>
+<p>So, yes, there's already a library called <a href="https://github.com/evanw/glfx.js">glfx.js</a> which basically does the same thing. And I'm almost saddened to say that it's excellent.</p>
+<p>It's not all in vain, however. My implementation features <em>raw</em> convolution and color matrix filters. The latter should be particularly interesting for those coming from the Flash world: it's the exact same as Flash's <a href="http://help.adobe.com/en_US/FlashPlatform/reference/actionscript/3/flash/filters/ColorMatrixFilter.html">ColorMatrixFilter</a> and allows for some nice &quot;Instagrammy&quot; photo effects among others. There are some JavaScript libraries around that implement this ColorMatrixFilter, but they all do it in JavaScript directly, which is quite slow. Mine can be used in realtime, even on iOS with <a href="https://github.com/phoboslab/Ejecta">Ejecta</a>.</p>
+<p>I also learned some things about WebGL and Shaders with all this. One interesting aspect is that you can't draw a framebuffer texture onto itself. So in order to apply more than one effect for the same image, you need to juggle around 2 textures - use one as the source, the other one as the target and then switch. And if you don't want to waste any draw calls, you need to know which draw call will be the last, so that you can draw directly onto the target Canvas instead of on a framebuffer texture.</p>
+<p>WebGL's coordinate system also complicates things a bit. It has the origin in the bottom left corner, instead of in the top left like most 2D APIs, essentially flipping everything on the Y axis. This has caused me a lot of pain with <a href="http://impactjs.com/ejecta">Ejecta</a> already. The solution sounds trivial: just scale your drawing coordinates by -1, but this only gets you so far. If you need to get the pixel data of your image or draw one canvas into another, you suddenly have to invert everything again.</p>
+<p>Lesson learned: Always google before you start working.</p>
+<p>Download: <a href="https://github.com/phoboslab/WebGLImageFilter">WebGLImageFilter on github</a>.</p>
+
+	<div class="foot">
+		<div>Sunday, November 3rd 2013</div>
+		<div>— Dominic Szablewski, <a href="http://twitter.com/phoboslab">@phoboslab</a></div>
+	</div>
+	
+	<div class="comments">
+		<a name="comments"></a>
+		
+					<h3>11 Comments:</h3>
+			
+				
+			<div class="comment" id="comment1">
+				<div class="commentInfo">
+					<a href="#comment1" title="Permalink to this Comment"><em>#1</em></a> – 
+					
+											<a rel="nofollow" href="http://gotofritz.net">gotofritz</a>
+										
+					<span class="commentDate">– Monday, November 4th 2013, 09:05</span>
+				</div>
+				
+				<p>
+					~hug~				</p>
+			</div>
+				
+			<div class="comment" id="comment2">
+				<div class="commentInfo">
+					<a href="#comment2" title="Permalink to this Comment"><em>#2</em></a> – 
+					
+											<a rel="nofollow" href="http://webplatformdaily.org">Šime Vidas</a>
+										
+					<span class="commentDate">– Tuesday, November 5th 2013, 21:12</span>
+				</div>
+				
+				<p>
+					Would be interesting to see how well they perform on a Firefox OS phone.				</p>
+			</div>
+				
+			<div class="comment" id="comment3">
+				<div class="commentInfo">
+					<a href="#comment3" title="Permalink to this Comment"><em>#3</em></a> – 
+					
+											<a rel="nofollow" href="http://phoboslab.org/">Dominic</a>
+										
+					<span class="commentDate">– Thursday, November 21st 2013, 13:11</span>
+				</div>
+				
+				<p>
+					@Šime Vidas: works perfectly fine on my Keon.				</p>
+			</div>
+				
+			<div class="comment" id="comment4">
+				<div class="commentInfo">
+					<a href="#comment4" title="Permalink to this Comment"><em>#4</em></a> – 
+					
+											<a rel="nofollow" href="http://gamejolt.com/profile/felipebudinich/115774/">Felipe Budinich</a>
+										
+					<span class="commentDate">– Friday, December 13th 2013, 19:46</span>
+				</div>
+				
+				<p>
+					It's always good to have options, there is no one-size-fits-all<br />
+<br />
+I'm glad you made this, besides you wont ever &quot;unlearn&quot; what you learnt doing it :)				</p>
+			</div>
+				
+			<div class="comment" id="comment5">
+				<div class="commentInfo">
+					<a href="#comment5" title="Permalink to this Comment"><em>#5</em></a> – 
+					
+											<a rel="nofollow" href="http://www.friv2g.org">friv 2</a>
+										
+					<span class="commentDate">– Thursday, June 12th 2014, 10:08</span>
+				</div>
+				
+				<p>
+					I got more from your article than I have from others that have similar information.				</p>
+			</div>
+				
+			<div class="comment" id="comment6">
+				<div class="commentInfo">
+					<a href="#comment6" title="Permalink to this Comment"><em>#6</em></a> – 
+					
+											<a rel="nofollow" href="http://bjornroche.com">Bjorn Roche</a>
+										
+					<span class="commentDate">– Friday, July 25th 2014, 16:12</span>
+				</div>
+				
+				<p>
+					Hey there,<br />
+<br />
+I was looking around for ways to get certain looks using a matrix color filter and found this. Sweet! Thanks!<br />
+<br />
+(I was really looking for a way to play with them myself online, but I think the looks you have are pretty much what I was after. Coolio!).<br />
+<br />
+I'm curious if you can say where you got those numbers from. Are they stashed away in some book, or did you make them up? eg:<br />
+<br />
+<pre>	_filter.brownie = function() {
+		_filter.colorMatrix([
+			0.5997023498159715,0.34553243048391263,-0.2708298674538042,0,47.43192855600873,
+			-0.037703249837783157,0.8609577587992641,0.15059552388459913,0,-36.96841498319127,
+			0.24113635128153335,-0.07441037908422492,0.44972182064877153,0,-7.562075277591283,
+			0,0,0,1,0
+		]);
+	};</pre>				</p>
+			</div>
+				
+			<div class="comment" id="comment7">
+				<div class="commentInfo">
+					<a href="#comment7" title="Permalink to this Comment"><em>#7</em></a> – 
+					
+											<a rel="nofollow" href="http://www.whitecatjoinery.co.uk/">sash windows</a>
+										
+					<span class="commentDate">– Saturday, July 26th 2014, 21:13</span>
+				</div>
+				
+				<p>
+					very cool effects. 				</p>
+			</div>
+				
+			<div class="comment" id="comment8">
+				<div class="commentInfo">
+					<a href="#comment8" title="Permalink to this Comment"><em>#8</em></a> – 
+					
+											<a rel="nofollow" href="http://www.lezizrestaurants.co.uk/">leziz</a>
+										
+					<span class="commentDate">– Saturday, July 26th 2014, 21:14</span>
+				</div>
+				
+				<p>
+					thank you for the source. we will ad this to our gallery.				</p>
+			</div>
+				
+			<div class="comment" id="comment9">
+				<div class="commentInfo">
+					<a href="#comment9" title="Permalink to this Comment"><em>#9</em></a> – 
+					
+											<a rel="nofollow" href="http://fbgamescheats.net/dragon-city-cheats-and-hacks/">tool dragon city</a>
+										
+					<span class="commentDate">– Monday, July 27th 2015, 18:14</span>
+				</div>
+				
+				<p>
+					From this website you can get tool dragon city very easily. You can also get unlimited gems,gold and food of dragon city free of cost which helps in play dragon city game.				</p>
+			</div>
+				
+			<div class="comment" id="comment10">
+				<div class="commentInfo">
+					<a href="#comment10" title="Permalink to this Comment"><em>#10</em></a> – 
+					
+											Amarneethi										
+					<span class="commentDate">– Thursday, February 4th 2016, 14:07</span>
+				</div>
+				
+				<p>
+					Hi, I'm new to javascript. Wondering what is the &quot;inputimage&quot; parameter does?				</p>
+			</div>
+				
+			<div class="comment" id="comment11">
+				<div class="commentInfo">
+					<a href="#comment11" title="Permalink to this Comment"><em>#11</em></a> – 
+					
+											Pablusplus										
+					<span class="commentDate">– Wednesday, October 12th 2016, 00:51</span>
+				</div>
+				
+				<p>
+					i have a question... i'm newbie at this. How can a use the convolutional filter?				</p>
+			</div>
+			
+		<a name="post"></a>
+		<h2>Post a Comment:</h2>
+
+		<form method="post" class="commentAdd" action="/log/2013/11/fast-image-filters-with-webgl#post">
+										<div>
+					<h4>Comment: (Required)</h4>
+					<div class="commentInfo">
+						(use &lt;code&gt; tags for preformatted text; URLs are recognized automatically)
+						<input type="text" name="email" value="" class="formFieldSpecial"/>
+					</div>
+					<textarea name="content" rows="5" cols="62"></textarea>
+					<div class="formbox">
+						<h4>Name: (Required)</h4>
+						<input type="text" name="name" value="" class="full-width"/>
+					</div>
+					<div class="clear"></div>
+					
+					
+					<div>
+						<span id="noSpamJSHint">
+							Please type <strong>phoboslab</strong> into the following input field or enable Javascript. 
+							This is an anti-spam measure. Sorry for the inconvenience.
+						</span>
+						<input type="text" name="noSpamJS" id="noSpamJS" value=""/>
+					</div>
+					
+					<script type="text/javascript">
+						document.getElementById('noSpamJS').type = 'hidden';
+						document.getElementById('noSpamJSHint').style.display = 'none';
+						document.getElementById('noSpamJS').value='phoboslab';
+					</script>
+					
+					<input class="submit" type="submit" name="pluginCommentsAdd" value="Submit Comment"/>
+				</div>
+					</form>
+	</div>
+</div>
+
+	<div id="foot">
+		<div id="copy">
+			&copy; 2017 Dominic Szablewski - 
+			<a href="/imprint">Imprint</a> -
+			powered by <a href="http://www.pagenode.org">Pagenode</a> - 
+			made in Hesse &lt;3
+			<!-- ts:20170924004601 -->
+		</div>
+	</div>
+</div>
+
+</body>
+</html>

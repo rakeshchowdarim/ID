@@ -41,8 +41,8 @@
 			//print 'alert(Logged in as' . $_SESSION['compName'].')';
 			header('Location: ' . "dates.php");
 		}elseif ($_SESSION['company']=="DuPont Pioneer" && $_SESSION['username']=="dupont" && $_SESSION['password'] =="infrapioneer123"  ) {
-			$_SESSION['company'] = 'DuPont_Pioneer';
-			$_SESSION['username'] = 'duPont_Pioneer';
+			$_SESSION['company'] = 'DuPont-Pioneer';
+			$_SESSION['username'] = 'duPont-Pioneer';
 			//print 'alert(Logged in as' . $_SESSION['compName'].')';
 			header('Location: ' . "dates.php");
 		}else{

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>TIFF Test</title>
+  <script type="text/javascript">
+
+function drawImage(){
+    var ctx = $("canvas")[0].getContext("2d"),
+        img = new Image();
+    
+    img.onload = function(){
+        ctx.drawImage(img, 0, 0, 500, 500);
+        $("span").text("Loaded.");
+    };
+    img.src = "img/color.png";
+    $("span").text("Loading...");
+}
+
+$("#button").click(drawImage());
+
+  </script>
+</head>
+<body>
+<button id="button" >Add image</button>
+<span></span>
+<canvas width="500" height="500"></canvas>
+</body>
+</html>

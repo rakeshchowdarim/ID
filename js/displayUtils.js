@@ -1,14 +1,48 @@
 function formatName(folderPath) {
 
 	var folderSplit = folderPath.split("/");
+	console.log(folderSplit);
+	var dateVar = folderSplit[2].split("_");
+	console.log(dateVar);
+	
+
+	if(dateVar[1].includes("01")){
+		dateVar[1]="January";
+	}else if(dateVar[1].includes("02")){
+		dateVar[1]="February";
+	}else if(dateVar[1].includes("03")){
+		dateVar[1]="March";
+	}else if(dateVar[1].includes("04")){
+		dateVar[1]="April";
+	}else if(dateVar[1].includes("05")){
+		dateVar[1]="May";
+	}else if(dateVar[1].includes("06")){
+		dateVar[1]="June";
+	}else if(dateVar[1].includes("07")){
+		dateVar[1]="July";
+	}else if(dateVar[1].includes("08")){
+		dateVar[1]="August";
+	}else if(dateVar[1].includes("09")){
+		dateVar[1]="September";
+	}else if(dateVar[1].includes("10")){
+		dateVar[1]="October";
+	}else if(dateVar[1].includes("11")){
+		dateVar[1]="November";
+	}else if(dateVar[1].includes("12")){
+		dateVar[1]="December";
+	}
+
+	console.log(dateVar[1]);
+
 	var nameDisplay = folderSplit[1].charAt(0).toUpperCase() + folderSplit[1].slice(1) + " - "
-							+	folderSplit[2].charAt(0).toUpperCase()+ folderSplit[2].substr(1,folderSplit[2].length-7)
-							+	" " + folderSplit[2].substr(folderSplit[2].length-6, 2) + ", " 
-							+	 folderSplit[2].substr(folderSplit[2].length-4, 4);
+							+	dateVar[1]+" "+dateVar[2]+ ", " + dateVar[0];
 console.log(nameDisplay);
 	if(nameDisplay.includes("_")){
 		nameDisplay=nameDisplay.replace("_"," ");
 	}
+	// }else if(nameDisplay.includes("-")){
+	// 	nameDisplay=nameDisplay.replace("-"," ");
+	// }
 	
 	document.getElementById('pageName').style.color= "white";
 

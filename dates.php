@@ -7,6 +7,11 @@
 <html style="width: 100%;height: 100%; padding:0!important; margin:0 !important;">
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="refresh" content="1800;url=index.php" />
+<meta http-equiv="cache-control" content="max-age=0">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="-1">
+<meta http-equiv="pragma" content="no-cache">
 <link rel="stylesheet" href="style/grid.css">
 <link rel="icon" href="img/a.png">
 <title> <?php echo $_SESSION['company'] ?> Web Portal</title>
@@ -50,16 +55,17 @@ function goBack() {
 
 <body>
 
-<div class="wrapper">
-	<div class="box mainHead"> 
+<div class="wrapper" style="align-items: stretch ;background-image: url(img/v1.png);background-position: top;background-repeat: no-repeat;background-size: 15%;">
+	<div class="box mainHead" style="vertical-align: middle;"> 
 		<img style="margin-left: 7px;" src="https://s3.amazonaws.com/visualizationsoftware/<?php echo lcfirst($_SESSION['company']) ;?>/<?php echo lcfirst($_SESSION['company']) ;?>.logo.png" class="img Left home">
 		<img style="margin-right: 10px;" src="img/infradrone.png" class="img Right">
 	</div>
 	
 	<div class="box navHead cyan">
-		<img src="img/logout.png" class="img Left back button" style="margin-left: 10px;" onclick="window.location.href='logout.php'">
-		<img src="img/home.png" class="img Right home button" style="margin-right: 10px;" onclick="window.location.href='dates.php'">
-		<div class="name pageTitle" id="pageName" style="margin-top: 9px;"><?php echo ucwords($_SESSION['company']) ; ?></div>
+		<img src="img/logout.png" class="img Left back button" style="margin-left: 0px;" onclick="window.location.href='logout.php'">
+		<img src="img/home.png" class="img Right home button" style="margin-right: 0px;" onclick="window.location.href='dates.php'">
+		<!-- <div class="name pageTitle" id="pageName" style="margin-top: 9px;"><?php echo ucwords($_SESSION['company']) ; ?></div> -->
+		<div class="name pageTitle" id="pageNameDisp" style="margin-top: 9px;"></div>
 	</div>
 	
 	<div class="box lhs vControl cyan">
@@ -67,7 +73,7 @@ function goBack() {
 		<img id="images" src="htmlImages/image.png" class="img2 button l" onclick="makeFocus(this.id, 'Images')"> -->
 	</div>
 	
-	<div class="box frameBox" >
+	<div class="box frameBox">
 		<iframe src="foldersGalleryHTML.php" scrolling="no" class="iFrame" id="body" align="middle"></iframe>
 	</div>
 	
@@ -75,7 +81,7 @@ function goBack() {
 		<!-- <img id="hd" src="htmlImages/hd.png" class="img2 button r" onclick="makeFocus(this.id)"> -->
 		
 	</div>
-	
+		<div class="cyan footerL"></div>
 	<div class="box footer cyan"></div>
 </div>
  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -83,5 +89,21 @@ function goBack() {
 <script src="js/veiwer.js"></script>
 
 </body>
+
+<script type="text/javascript">
+
+
+	function nameRep(str){
+		var strr= str.replace("-"," ");
+		// console.log(strr);
+		$('#pageNameDisp').html(strr);
+	}
+
+	window.onload=function(){
+		nameRep("<?php echo ucwords($_SESSION['company']) ; ?>");
+	}
+	
+		
+</script>
 
 </html>
